@@ -4,7 +4,7 @@ O rNOMADS é uma interface para o sistema NOMADS que pode recuperar dados binár
 
 ```
 
-Script R e relatório rmarkdown.
+Script R e relatório dinâmico.
 
 
 ```
