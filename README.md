@@ -1,4 +1,4 @@
-### Utilizando o pacote rNOMADS para acessar dados de modelos cimáticos NCEP | NOAA. 
+### Utilizando o pacote rNOMADS para acessar dados de clima NCEP | NOAA. 
 
 O rNOMADS é uma interface para o sistema NOMADS que pode recuperar dados binários em formato grib, bem como importar dados ascii diretamente para o R. 
 
