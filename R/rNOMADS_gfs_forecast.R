@@ -1,5 +1,5 @@
 #' ---
-#' title: "API rNOMADS para recuperar dados de modelos climáticos NOAA"
+#' title: "API rNOMADS para acessar previsões NCEP | NOAA"
 #' subtitle: "Previsão da precipitação acumulada (mm) para os próximos 15 dias"
 #' author: Vinicio Coelho Lima
 #' email: viniciovcl@gmail.com
@@ -50,8 +50,7 @@ library(raster)
 model.list  <-  NOMADSRealTimeList ( "dods" )
 
 modelos <- aggregate(url ~ name,
-                     data = model.list,
-                     FUN = paste, collapse = ", ")
+                     data = model.list, FUN = paste, collapse = ", ")
 
 knitr::kable(modelos, row.names = TRUE)
 
@@ -113,10 +112,8 @@ lat.diff <- abs(lat - lats)
 model.lon.ind <- which(lon.diff == min(lon.diff)) - 1 # Indexado no 0
 model.lat.ind <- which(lat.diff == min(lat.diff)) - 1
 
-
 lon.inds <- c(model.lon.ind - 12, model.lon.ind + 12) # região
 lat.inds <- c(model.lat.ind - 14, model.lat.ind + 14)
-
 
 
 #' ## Modelo mais recente
@@ -137,6 +134,7 @@ latest.model.run
 #+ var, echo=TRUE, eval=TRUE, warning=FALSE, message= FALSE
 
 model.info <- GetDODSModelRunInfo(latest.model, tail(model.runs$model.run, 1))
+
 model.info.var <- model.info[c(10,11,28,43,141:148,170,180,201:204,216,220,239)]
 
 knitr::kable(as.data.frame(model.info.var), row.names = TRUE)
@@ -204,8 +202,8 @@ pts <- st_sf(pt = 1:2,
                -61.633383, -33.751178
              )), st_point(c(
                -39.856829, -7.349028
-             ))),
-             crs = 4326)
+             ))), crs = 4326)
+
 pol <- pts %>% st_bbox() %>% st_as_sfc(., crs = 4326)
 mask <- st_as_text(st_geometry(pol))
 
@@ -242,19 +240,18 @@ mun_label_coords <- cbind(mun_label, st_coordinates(mun_label))
 library(dplyr)
 library(sf)
 
-
 pts <- st_sf(pt = 1:2,
              geom = st_sfc(st_point(c(
                -61.633383, -33.751178
              )), st_point(c(
                -39.856829, -7.349028
-             ))),
-             crs = 4326)
+             ))), crs = 4326)
+
 pol <- pts %>% st_bbox() %>% st_as_sfc(., crs = 4326)
 subset_reg <- st_as_text(st_geometry(pol))
 
 bc_ibge <- "/IBGE/BC_250/bc250_ibge.gpkg"
-st_layers(bc_ibge)
+layers <- st_layers(bc_ibge)
 
 # Sys.setlocale("LC_ALL", "pt_BR.UTF-8")
 cidade <- st_read(bc_ibge, layer = "lml_cidade_p",
@@ -363,6 +360,31 @@ ext.mapa <- c(xmin = -58.0, xmax = -46.25, ymin = -28, ymax = -13)
 #+ fig_plot, echo=FALSE,eval=TRUE, warning=FALSE, message= FALSE, out.height = '100%',  fig.align='center', fig.pos="H"
 
 knitr::include_graphics("../mapa_modelo_gfs.png")
+
+#'
+#' ## Referência:
+#'
+#' Bowman D (2014). rNOMADS: An interface to the NOAA Operational Model Archive and Distribution System. R package version 2.0.2, https://r-forge.r-project.org/projects/rnomads.
+
+#'
+#' ## Apêndice:
+#'
+#' ### Sessão R
+#'
+
+#+ env, echo=TRUE,eval=FALSE, warning=FALSE, message= FALSE
+
+sessionInfo()
+
+#+ env_, echo=FALSE,eval=TRUE, warning=FALSE, message= FALSE
+
+env <- sessionInfo()
+env
+
+
+#+ render, echo=TRUE,eval=FALSE, warning=FALSE, message= FALSE
+
+rmarkdown::render("./R/rNOMADS_gfs_forecast.R", output_format = "pdf_document")
 
 
 
