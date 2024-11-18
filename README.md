@@ -11,6 +11,6 @@ Script, mapa e relatório pdf do fluxo de execução.
 
 ### Referências:
 
-<https://r-forge.r-project.org/projects/rnomads/>
+Bowman D (2014). rNOMADS: An interface to the NOAA Operational Model Archive and Distribution System. R package version 2.0.2, https://r-forge.r-project.org/projects/rnomads.
 
 <https://nomads.ncep.noaa.gov/>
